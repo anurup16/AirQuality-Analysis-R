@@ -1,0 +1,71 @@
+
+
+library(httr)
+library(jsonlite)
+library(dplyr)
+library(lubridate)
+library(readr)
+
+cat("🔍 Fetching air quality data for London (OpenAQ v3 API)...\n")
+
+# OpenAQ v3 API (UK -> GB)
+url_air <- "https://api.openaq.org/v3/measurements?country_id=GB&city=London&parameter=pm25&date_from=2025-11-01&limit=1000"
+
+response <- GET(url_air, add_headers(Accept = "application/json"))
+
+if (response$status_code != 200) {
+  stop("❌ Failed to fetch air quality data. HTTP code: ", response$status_code)
+}
+
+data_text <- content(response, "text", encoding = "UTF-8")
+data_json <- fromJSON(data_text)
+
+if (is.null(data_json$results) || nrow(data_json$results) == 0) {
+  stop("❌ No air quality data found for London from OpenAQ.")
+}
+
+air_df <- data_json$results %>%
+  as.data.frame() %>%
+  mutate(datetime = ymd_hms(date.utc)) %>%
+  select(datetime, location, parameter, value, unit, latitude, longitude)
+
+cat("✅ Air quality data fetched successfully. Total records: ", nrow(air_df), "\n")
+
+# Get last 7 days of weather data for London
+cat("🌤 Fetching weather data from Open-Meteo...\n")
+
+latitude <- 51.5074
+longitude <- -0.1278
+today <- Sys.Date()
+start_date <- today - 7
+
+url_weather <- paste0(
+  "https://api.open-meteo.com/v1/forecast?",
+  "latitude=", latitude,
+  "&longitude=", longitude,
+  "&start_date=", start_date,
+  "&end_date=", today,
+  "&hourly=temperature_2m,relative_humidity_2m,windspeed_10m"
+)
+
+response_weather <- GET(url_weather)
+weather_json <- fromJSON(content(response_weather, "text", encoding = "UTF-8"))
+
+weather_df <- data.frame(
+  datetime = ymd_hms(paste(weather_json$hourly$time, ":00", sep = "")),
+  temperature = weather_json$hourly$temperature_2m,
+  humidity = weather_json$hourly$relative_humidity_2m,
+  windspeed = weather_json$hourly$windspeed_10m
+)
+
+cat("✅ Weather data fetched successfully.\n")
+
+# Merge datasets
+cat("🔗 Merging air quality and weather data...\n")
+
+merged_df <- merge(air_df, weather_df, by = "datetime", all = TRUE)
+
+if (!dir.exists("data")) dir.create("data")
+write.csv(merged_df, "data/london_air_weather.csv", row.names = FALSE)
+
+cat("✅ Data saved successfully at: data/london_air_weather.csv\n")

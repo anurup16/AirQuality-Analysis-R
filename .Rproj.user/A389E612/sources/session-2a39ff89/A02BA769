@@ -1,0 +1,27 @@
+{
+    "id": "A02BA769",
+    "path": "~/Desktop/DS/air-quality-weather/air-quality-weather/02_explore_data.R",
+    "project_path": "02_explore_data.R",
+    "type": "r_source",
+    "hash": "859465202",
+    "contents": "",
+    "dirty": false,
+    "created": 1762692695617.0,
+    "source_on_save": false,
+    "relative_order": 5,
+    "properties": {
+        "tempName": "Untitled1",
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "18,36",
+        "scrollLine": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1762692725,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1762692725457,
+    "read_only": false,
+    "read_only_alternatives": []
+}

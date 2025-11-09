@@ -1,0 +1,27 @@
+{
+    "id": "93DD3D80",
+    "path": "~/Desktop/DS/air-quality-weather/air-quality-weather/04_conclusion_report.R",
+    "project_path": "04_conclusion_report.R",
+    "type": "r_source",
+    "hash": "0",
+    "contents": "",
+    "dirty": false,
+    "created": 1762693034160.0,
+    "source_on_save": false,
+    "relative_order": 7,
+    "properties": {
+        "tempName": "Untitled1",
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "6,25",
+        "scrollLine": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1762693079,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1762693079670,
+    "read_only": false,
+    "read_only_alternatives": []
+}
